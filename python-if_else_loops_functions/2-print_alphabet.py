@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-char = 97
 
-while char <= 122:
-    print(chr(char), end="")
-    char += 1
+for i in range(ord('a'), ord('z') + 1, 1):
+    print(chr(i), end="")
