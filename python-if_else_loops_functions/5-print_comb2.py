@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 for i in range(1, 100):
-    if i < 10:
-        print("0{}, ".format(i), end="")
-    else:
-        print("{}, ".format(i), end="")
+    print("0{}".format(i) if i < 10 else "{}".format(i), end="" if i < 99 else "\n")
+    if i < 99:
+        print(", ".format(i), end="")
