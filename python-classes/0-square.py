@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 """
 0-square.py
-This module defines a class named Square.
+Module containing class Square.
 """
+
+
 class Square:
     """
-    A class that defines a square.
+    A class to define a square.
     """
     pass
