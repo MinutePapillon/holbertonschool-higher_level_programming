@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """
+0-square.py
 This module defines a class named Square.
-It is an empty class that serves as a placeholder
-for future development.
 """
 class Square:
     """
