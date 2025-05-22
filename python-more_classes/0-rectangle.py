@@ -4,6 +4,7 @@
 Module containing class Square.
 """
 
+
 class Rectangle:
     """
     A class to define a rectangle.
