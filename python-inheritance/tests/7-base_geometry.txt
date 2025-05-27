@@ -1,5 +1,114 @@
-$ cat 7-main.py
-$ ./7-main.py
-[TypeError] name must be an integer
-[ValueError] age must be greater than 0
-[ValueError] distance must be greater than 0
+>>> BaseGeometry = __import__('7-base_geometry').BaseGeometry
+
+area
+----
+
+.. code-block:: python
+
+	>>> bg = BaseGeometry()
+        >>> bg.area()
+        Traceback (most recent call last):
+        ...
+        Exception: area() is not implemented
+
+integer_validator - Wrong Arguments Number
+------------------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("age")
+        Traceback (most recent call last):
+	...
+	TypeError: integer_validator() missing 1 required positional argument: 'value'
+
+integer_validator - String As Value
+-----------------------------------
+
+.. code-block:: python
+
+	>>> bg = BaseGeometry()
+	>>> bg.integer_validator("hello", "world")
+	Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - Tuple As Value
+----------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("hello", (5, 5))
+        Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - List As Value
+---------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("hello", [5, 5])
+        Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - Boolean As Value
+------------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("hello", True)
+        Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - Set As Value
+--------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("hello", {5, 5})
+        Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - None As Value
+---------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("hello", None)
+        Traceback (most recent call last):
+        ...
+        TypeError: hello must be an integer
+
+integer_validator - Positive As Value
+-------------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("number", 10)
+
+integer_validator - Negative / 0 As Value
+-----------------------------------------
+
+.. code-block:: python
+
+        >>> bg = BaseGeometry()
+        >>> bg.integer_validator("number", -10)
+        Traceback (most recent call last):
+        ...
+        ValueError: number must be greater than 0
+
+	>>> bg = BaseGeometry()
+        >>> bg.integer_validator("number", 0)
+        Traceback (most recent call last):
+        ...
+        ValueError: number must be greater than 0
