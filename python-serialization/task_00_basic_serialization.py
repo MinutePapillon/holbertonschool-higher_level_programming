@@ -3,7 +3,8 @@ import json
 
 
 def serialize_and_save_to_file(data, filename):
-    fichier.write(json.dumps(data))
+    with open(filename, 'w', encoding="UTF-8") as fichier:
+        fichier.write(json.dumps(data))
 
 
 def load_and_deserialize(filename):
