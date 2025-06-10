@@ -40,3 +40,23 @@ Elles indiquent au serveur ce que le client veut faire.
 |pratiques    |Remplacer une ressource existante|Mettre à jour un article|
 |PATCH         |Modifier partiellement une ressource|Changer juste le titre d'un article|
 |DELETE        |Supprimer une ressource            |Supprimer un commentaire|
+
+# Les codes de statut HTTP
+Après chaque requête le serveur renvoie un code de statut pour indiquer ce qu'il s'est passé.
+Le code a toujours 3 chiffres.
+    * 1xx : information
+    * 2xx : succés
+    * 3xx : redirection
+    * 4xx : erreur côté client 
+    * 5xx : erreur côté serveur
+
+Les plus courants:
+|Code       |Nom        |Signification      |
+|----------|-------------------|-------------------------|
+|200        |ok                 |tout s'est bien passé |
+|201        |Created                 |Une ressource a été créée |
+|400        |Bad Request                 |Mauvaise syntaxe ou champ manquant |
+|401        |Unauthorized                 |Connexion requise |
+|401        |Unauthorized                 |Connexion requise |
+|404       |Not Found                 |Page ou ressource introuvable |
+|500        |Internal Server Error                 |Le serveur a planté |
