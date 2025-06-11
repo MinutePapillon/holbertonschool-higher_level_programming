@@ -24,3 +24,4 @@ def fetch_and_save_posts():
                 "id": post["id"],
                 "title": post["title"],
                 "body": post["body"]})
+            print(post)
