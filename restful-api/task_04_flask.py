@@ -2,8 +2,6 @@ from flask import Flask, jsonify, request
 
 add = Flask(__name__)
 
-}
-
 @add.route("/")
 def home():
     return "Welcome to the Flask API!"
