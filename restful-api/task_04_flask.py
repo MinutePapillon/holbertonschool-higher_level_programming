@@ -1,48 +1,65 @@
-#!/usr/bin/python3
-from flask import Flask, jsonify, request
+#!./venv/bin/python3
+"""
+Module.
+"""
+from flask import Flask
+from flask import jsonify
+from flask import request
+import json
 
 app = Flask(__name__)
-
 users = {}
+
 
 @app.route("/")
 def home():
-    return "Welcome to the Flask API!"
+    return ("Welcome to the Flask API!")
+
 
 @app.route("/data")
-def data():
-    return jsonify(list(users.keys()))
+def get_usernames():
+    usernames = [username for username in users.keys()]
+    return jsonify(usernames)
 
-@app.route("/status")
-def status():
-    return "OK"
 
 @app.route("/users/<username>")
 def get_user(username):
-    user = users.get(username)
-    if user:
+    if username in users.keys():
+        user = users[username]
         return jsonify(user)
     else:
-        return jsonify({"error": "User not found"}), 404
+        error = {"error": "User not found"}
+        return jsonify(error), 404
+
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
-    data = request.get_json()
+    if request.method == "POST":
+        content = json.loads(request.data)
 
-    if "username" not in data:
-        return jsonify({"error": "Username is required"}), 400
+        if "username" in content.keys():
+            user = {
+                "username": content["username"],
+                "name": content["name"],
+                "age": content["age"],
+                "city": content["city"]
+            }
+            users[user["username"]] = user
+            message = "User added"
+            return jsonify({
+                "message": message,
+                "user": user
+            }), 201
 
-    username = data["username"]
+        else:
+            message = {"error": "Username is required"}
+            return jsonify(message), 400
 
-    if username in users:
-        return jsonify({"error": "Username already exists"}), 400
 
-    users[username] = data
+@app.route("/status")
+def get_status():
+    return ("OK")
 
-    return jsonify({
-        "message": "User added",
-        "user": data
-    }), 201
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
