@@ -1,20 +1,23 @@
+#!/usr/bin/python3
 from flask import Flask, jsonify, request
 
-add = Flask(__name__)
+app = Flask(__name__)
 
-@add.route("/")
+users = {}
+
+@app.route("/")
 def home():
     return "Welcome to the Flask API!"
 
-@add.route("/data")
+@app.route("/data")
 def data():
     return jsonify(list(users.keys()))
 
-@add.route("/status")
+@app.route("/status")
 def status():
     return "OK"
 
-@add.route("/users/<username>")
+@app.route("/users/<username>")
 def get_user(username):
     user = users.get(username)
     if user:
@@ -22,7 +25,7 @@ def get_user(username):
     else:
         return jsonify({"error": "User not found"}), 404
 
-@add.route("/add_user", methods=["POST"])
+@app.route("/add_user", methods=["POST"])
 def add_user():
     data = request.get_json()
 
@@ -30,6 +33,10 @@ def add_user():
         return jsonify({"error": "Username is required"}), 400
 
     username = data["username"]
+
+    if username in users:
+        return jsonify({"error": "Username already exists"}), 400
+
     users[username] = data
 
     return jsonify({
@@ -38,4 +45,4 @@ def add_user():
     }), 201
 
 if __name__ == "__main__":
-    add.run(debug=True)
+    app.run(debug=True)
