@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, request
 
 add = Flask(__name__)
-users = {
-    "jane": {"name": "Jane", "age": 28, "city": "Los Angeles"}
+
 }
 
 @add.route("/")
