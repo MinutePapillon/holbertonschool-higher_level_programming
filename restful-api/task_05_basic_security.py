@@ -34,12 +34,12 @@ def verify_password(username, password):
     return None
 
 @jwt.user_identity_loader
-def user_identity_lookup(user):
-    return user["username"]
+def user_identity_lookup(username):
+    return username
 
 @jwt.additional_claims_loader
-def add_claims_to_access_token(identity):
-    return {"role": users[identity]["role"]}
+def add_claims_to_access_token(username):
+    return {"role": users[username]["role"]}
 
 @jwt.unauthorized_loader
 def handle_unauthorized_error(err):
@@ -75,7 +75,7 @@ def login():
 
     user = users.get(username)
     if user and check_password_hash(user["password"], password):
-        access_token = create_access_token(identity=user)
+        access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token), 200
     return jsonify({"error": "Invalid credentials"}), 401
 
