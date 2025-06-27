@@ -1,31 +1,35 @@
 #!/usr/bin/python3
 """
-Lists all states from the database hbtn_0e_0_usa.
-Usage: ./0-select_states.py <mysql_username> <mysql_password> <database_name>
+Module containing function listing states from a database.
 """
-import MySQLdb
 import sys
+import MySQLdb
 
-if __name__ == "__main__":
-    # Connexion à la base de données MySQL
-    db = MySQLdb.connect(
+
+def main():
+    """
+    Lists all states ordered by id in a database.
+    """
+    username = sys.argv[1]
+    password = sys.argv[2]
+    database = sys.argv[3]
+
+    conn = MySQLdb.connect(
         host="localhost",
-        port=3306,
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3]
+        port=3306, user=username,
+        passwd=password,
+        db=database,
+        charset="utf8"
     )
 
-    # Création du curseur pour exécuter les requêtes
-    cursor = db.cursor()
-
-    # Exécution de la requête SQL
-    cursor.execute("SELECT * FROM states ORDER BY id ASC")
-
-    # Affichage des résultats
-    for row in cursor.fetchall():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM states ORDER BY id ASC")
+    query_rows = cur.fetchall()
+    for row in query_rows:
         print(row)
+    cur.close()
+    conn.close()
 
-    # Fermeture de la connexion
-    cursor.close()
-    db.close()
+
+if __name__ == "__main__":
+    main()
