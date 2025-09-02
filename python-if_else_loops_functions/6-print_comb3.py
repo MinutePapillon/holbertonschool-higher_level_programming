@@ -4,3 +4,4 @@ for i in range(9):
         print(f"{i}{j}", end="")
         if i != 8 or j != 9:
             print(", ", end="")
+print()
