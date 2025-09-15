@@ -1,4 +1,12 @@
 #!/usr/bin/python3
+"""
+0-square.py
+Module containing class Square.
+"""
+
+
 class Square:
-    """Empty class that defines a square."""
+    """
+    A class to define a square.
+    """
     pass
