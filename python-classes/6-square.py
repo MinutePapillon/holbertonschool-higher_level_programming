@@ -4,50 +4,26 @@
 Module that defines a class Square with size, getter/setter and area method.
 """
 
-
 class Square:
     """
-    A class that defines a square by its size.
+    A class that defines a square by its size and position.
     """
 
     def __init__(self, size=0, position=(0, 0)):
         """
         Initialize a new Square instance.
-
-
-        Args:
-            size (int): The size of the square (default is 0).
         """
-
         self.size = size
         self.position = position
 
     @property
     def size(self):
-        """
-        Getter for the private attribute __size.
-
-
-        Returns:
-            int: The size of the square.
-        """
+        """Getter for the private attribute __size."""
         return self.__size
 
     @size.setter
     def size(self, value):
-        """
-        Setter for the private attribute __size.
-        Includes type and value validation.
-
-
-        Args:
-            value (int): The new size to set.
-
-
-        Raises:
-            TypeError: If size is not an integer.
-            ValueError: If size is less than 0.
-        """
+        """Setter for __size with validation."""
         if not isinstance(value, int):
             raise TypeError("size must be an integer")
         if value < 0:
@@ -55,53 +31,34 @@ class Square:
         self.__size = value
 
     def area(self):
-        """
-        Calculate the area of the square.
-
-
-        Returns:
-            int: The current square area.
-        """
+        """Return the current square area."""
         return self.__size ** 2
 
     def my_print(self):
-        """
-        Print the square
-        """
+        """Print the square with the character # and position offset."""
         if self.size == 0:
             print()
-        for i in range(self.position[1]):
+            return
+
+        # Décalage vertical
+        for _ in range(self.position[1]):
             print()
-        for i in range(self.size):
-            for k in range(self.position[0]):
-                print(" ", end="")
-            for j in range(self.size):
-                print("#", end="")
-            print()
+
+        # Affichage du carré
+        for _ in range(self.size):
+            print(" " * self.position[0] + "#" * self.size)
 
     @property
     def position(self):
-        """
-        Getter for the private attribute __position.
-
-        Returns:
-            tuple: The position of the square.
-        """
+        """Getter for __position."""
         return self.__position
 
     @position.setter
     def position(self, value):
-        """
-        Setter for the private attribute __position.
-        Includes type validation.
-
-        Args:
-            value (tuple): The new position to set.
-
-
-        Raises:
-            TypeError: If value is not a tuple.
-        """
-        if not isinstance(value, tuple):
+        """Setter for __position with validation."""
+        if (not isinstance(value, tuple) or
+            len(value) != 2 or
+            not all(isinstance(i, int) for i in value) or
+            not all(i >= 0 for i in value)):
             raise TypeError("position must be a tuple of 2 positive integers")
         self.__position = value
