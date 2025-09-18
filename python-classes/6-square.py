@@ -40,11 +40,9 @@ class Square:
             print()
             return
 
-        # Décalage vertical
         for _ in range(self.position[1]):
             print()
 
-        # Affichage du carré
         for _ in range(self.size):
             print(" " * self.position[0] + "#" * self.size)
 
