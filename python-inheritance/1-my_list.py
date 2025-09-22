@@ -14,5 +14,11 @@ class MyList(list):
         """
         Prints the list, but sorted in ascending order.
         Does not modify the original list.
+
+        Args:
+            self: the argument
+
+        Returns:
+            nothing
         """
         print(sorted(self))
