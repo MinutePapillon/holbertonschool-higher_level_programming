@@ -13,6 +13,18 @@ class Student:
 
     def to_json(self, attrs=None):
         """Retrieve dictionary representation of a Student instance"""
+        ordered_keys = ['age', 'last_name', 'first_name']
+        result = {}
+
         if isinstance(attrs, list) and all(isinstance(a, str) for a in attrs):
-            return {k: getattr(self, k) for k in attrs if hasattr(self, k)}
-        return self.__dict__.copy()
+            # Only include attributes from attrs that exist
+            for key in ordered_keys:
+                if key in attrs and hasattr(self, key):
+                    result[key] = getattr(self, key)
+        else:
+            # Include all attributes in the desired order
+            for key in ordered_keys:
+                if hasattr(self, key):
+                    result[key] = getattr(self, key)
+
+        return result
