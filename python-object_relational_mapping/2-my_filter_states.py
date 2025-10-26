@@ -1,28 +1,22 @@
 #!/usr/bin/python3
-"""
-Displays all values in the states table where name matches the argument.
-"""
-
+"""Module that query USA States from a database table"""
 import MySQLdb
 import sys
 
 
-def main():
-    """Connects to MySQL and filters by user input."""
-    username, password, database, state_name = sys.argv[1:5]
-
-    db = MySQLdb.connect(host="localhost", port=3306,
-                         user=username, passwd=password,
-                         db=database, charset="utf8")
-
-    cur = db.cursor()
-    query = "SELECT * FROM states WHERE name = '{}' ORDER BY id ASC".format(state_name)
-    cur.execute(query)
-    for row in cur.fetchall():
+if __name__ == "__main__":
+    conn = MySQLdb.connect(host="localhost",
+                           port=3306,
+                           user=sys.argv[1],
+                           passwd=sys.argv[2],
+                           db=sys.argv[3],
+                           charset="utf8")
+    cur = conn.cursor()
+    state = sys.argv[4]
+    cur.execute("SELECT * FROM states \
+        WHERE name LIKE BINARY '%{}' ORDER BY id ASC".format(state))
+    query_rows = cur.fetchall()
+    for row in query_rows:
         print(row)
     cur.close()
-    db.close()
-
-
-if __name__ == "__main__":
-    main()
+    conn.close()
