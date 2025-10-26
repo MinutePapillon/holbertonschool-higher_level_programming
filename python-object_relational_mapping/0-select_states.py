@@ -1,34 +1,45 @@
 #!/usr/bin/python3
 """
-Module containing function listing states from a database.
+This module lists all states from the database hbtn_0e_0_usa.
+It connects to a MySQL server using MySQLdb and retrieves all
+records from the table 'states', sorted by id in ascending order.
 """
-import sys
+
 import MySQLdb
+import sys
 
 
 def main():
     """
-    Lists all states ordered by id in a database.
+    Connects to a MySQL database and lists all states ordered by id in ascending order.
     """
+    # Retrieve command-line arguments
     username = sys.argv[1]
     password = sys.argv[2]
     database = sys.argv[3]
 
-    conn = MySQLdb.connect(
+    # Connect to the MySQL server
+    db = MySQLdb.connect(
         host="localhost",
-        port=3306, user=username,
+        port=3306,
+        user=username,
         passwd=password,
         db=database,
         charset="utf8"
     )
 
-    cur = conn.cursor()
+    # Create a cursor and execute the query
+    cur = db.cursor()
     cur.execute("SELECT * FROM states ORDER BY id ASC")
-    query_rows = cur.fetchall()
-    for row in query_rows:
+
+    # Fetch and display the results
+    rows = cur.fetchall()
+    for row in rows:
         print(row)
+
+    # Close cursor and connection
     cur.close()
-    conn.close()
+    db.close()
 
 
 if __name__ == "__main__":
