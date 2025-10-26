@@ -1,54 +1,31 @@
 #!/usr/bin/python3
 """
-Module containing function displaying specific cities from a database.
+Lists all cities of a given state from the database hbtn_0e_4_usa.
 """
-import sys
+
 import MySQLdb
+import sys
 
 
 def main():
-    """
-    Lists all cities for a sepecific state from a database.
-    """
-    if len(sys.argv) != 5:
-        sys.exit()
+    """Connects to MySQL and lists cities by given state name."""
+    username, password, database, state_name = sys.argv[1:5]
 
-    username = sys.argv[1]
-    password = sys.argv[2]
-    database = sys.argv[3]
-    state_searched = sys.argv[4]
+    db = MySQLdb.connect(host="localhost", port=3306,
+                         user=username, passwd=password,
+                         db=database, charset="utf8")
 
-    if "'" in state_searched:
-        sys.exit()
-
-    conn = MySQLdb.connect(
-        host="localhost",
-        port=3306, user=username,
-        passwd=password,
-        db=database,
-        charset="utf8"
-    )
-
-    cur = conn.cursor()
+    cur = db.cursor()
     cur.execute("""
         SELECT cities.name FROM cities
-        INNER JOIN states
-        ON states.id = cities.state_id
-        WHERE states.name = '{}'
+        JOIN states ON cities.state_id = states.id
+        WHERE states.name = %s
         ORDER BY cities.id ASC
-    """.format(state_searched))
-    query_rows = cur.fetchall()
-
-    if len(query_rows) > 0:
-        for row_num in range(len(query_rows)):
-            if row_num != len(query_rows) - 1:
-                print(query_rows[row_num][0], end=", ")
-            else:
-                print(query_rows[row_num][0])
-    else:
-        print()
+    """, (state_name,))
+    cities = [city[0] for city in cur.fetchall()]
+    print(", ".join(cities))
     cur.close()
-    conn.close()
+    db.close()
 
 
 if __name__ == "__main__":

@@ -1,45 +1,26 @@
 #!/usr/bin/python3
 """
-Module containing function displaying specific states from a database.
+Displays all values in the states table where name matches the argument safely.
 """
-import sys
+
 import MySQLdb
+import sys
 
 
 def main():
-    """
-    Lists all records safely with specific name from a database.
-    """
-    if len(sys.argv) != 5:
-        sys.exit()
+    """Connects to MySQL and safely filters by user input."""
+    username, password, database, state_name = sys.argv[1:5]
 
-    username = sys.argv[1]
-    password = sys.argv[2]
-    database = sys.argv[3]
-    searched_state = sys.argv[4]
+    db = MySQLdb.connect(host="localhost", port=3306,
+                         user=username, passwd=password,
+                         db=database, charset="utf8")
 
-    if "'" in searched_state:
-        sys.exit()
-
-    conn = MySQLdb.connect(
-        host="localhost",
-        port=3306, user=username,
-        passwd=password,
-        db=database,
-        charset="utf8"
-    )
-
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT * FROM states
-        WHERE name = '{}'
-        ORDER BY id ASC
-    """.format(searched_state))
-    query_rows = cur.fetchall()
-    for row in query_rows:
+    cur = db.cursor()
+    cur.execute("SELECT * FROM states WHERE name = %s ORDER BY id ASC", (state_name,))
+    for row in cur.fetchall():
         print(row)
     cur.close()
-    conn.close()
+    db.close()
 
 
 if __name__ == "__main__":
