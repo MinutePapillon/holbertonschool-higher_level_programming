@@ -2,60 +2,68 @@
 from flask import Flask, render_template, request
 import json
 import csv
+import os
 
 app = Flask(__name__)
 
-def json_file(filepath):
-    with open(filepath, 'r') as file:
-        return json.load(file)
-    
-def csv_file(filepath):
+
+def load_from_json(filepath="products.json"):
+    """Load product data from JSON file."""
+    if not os.path.exists(filepath):
+        return []
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            # expected: list of dicts
+            if isinstance(data, list):
+                return data
+            return []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def load_from_csv(filepath="products.csv"):
+    """Load product data from CSV file."""
+    if not os.path.exists(filepath):
+        return []
+
     products = []
-    with open(filepath, 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            row['id'] = int(row['id'])
-            row['price'] = float(row['price'])
-            products.append(row)
-        return products
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    row["id"] = int(row["id"])
+                    row["price"] = float(row["price"])
+                except (ValueError, TypeError):
+                    continue
+                products.append(row)
+    except OSError:
+        return []
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+    return products
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
 
-@app.route('/items')
-def items():
-    with open('items.json', 'r') as file:
-        data  = json.load(file)
-    list = data.get('items', [])
-    return render_template('items.html', list=list)
+@app.route("/products")
+def products_page():
+    """
+    Route: /products?source=json|csv&id=optional
+    """
+    source = request.args.get("source", "")
+    id_value = request.args.get("id", type=int)
 
-@app.route('/products')
-def products():
-    source = request.args.get('source')
-    id = request.args.get('id', type=int)
-    
-    if source == 'json':
-        products = json_file('products.json')
-    elif source == 'csv':
-        products = csv_file('products.csv')
+    error = None
+    products = []
+
+
+    if source == "json":
+        products = load_from_json()
+    elif source == "csv":
+        products = load_from_csv()
     else:
-        return render_template('product_display.html', message="Wrong source")
-    
-    if id:
-        products = [product for product in products if product['id'] == id]
-        if not products:
-            return render_template('product_display.html', message="Product not found")
-    
-    return render_template('product_display.html', products=products)
+        error = "Wrong source"
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    if not error and id_value is not None:
+        filtered = [p for p in products if int(p.get("id", -1)]()
