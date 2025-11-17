@@ -1,27 +1,36 @@
 #!/usr/bin/python3
 from flask import Flask, render_template
 import json
+import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+def load_items(filepath="items.json"):
+    """
+    Load items from a JSON file.
+    """
+    if not os.path.exists(filepath):
+        return []
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
 
-@app.route('/items')
+    items = data.get("items")
+    if isinstance(items, list):
+        return items
+    return []
+
+
+@app.route("/items")
 def items():
-    with open('items.json', 'r') as file:
-        data  = json.load(file)
-    list = data.get('items', [])
-    return render_template('items.html', list=list)
+    """Route that renders the items list page."""
+    items_list = load_items()
+    return render_template("items.html", items=items_list)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True, port=5000)
